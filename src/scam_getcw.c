@@ -161,15 +161,15 @@ static void *getcwthread_func(void* arg)
             {
               memcpy((&(scam_params->ca_pid)), buff + 1 + sizeof(int), sizeof(ca_pid_t));
               log_message( log_module,  MSG_DEBUG, "Got CA_SET_PID request channel: %s, index: %d pid: %d\n", channel->name, scam_params->ca_pid.index, scam_params->ca_pid.pid);
-              if(scam_params->ca_pid.index == -1) {
-                pthread_mutex_lock(&chan_p->lock);
-                --channel->ca_idx_refcnt;
-                if (!channel->ca_idx_refcnt) {
-                  channel->ca_idx = 0;
-                  log_message( log_module,  MSG_INFO, "Got CA_SET_PID removal request: %d setting channel %s with ca_idx to 0 %d\n", scam_params->ca_pid.pid, channel->name, scam_params->ca_pid.index+1);
-                }
-                pthread_mutex_unlock(&channel->cw_lock);
-              } else {
+//              if(scam_params->ca_pid.index == -1) {
+//                pthread_mutex_lock(&chan_p->lock);
+//                --channel->ca_idx_refcnt;
+//                if (!channel->ca_idx_refcnt) {
+//                  channel->ca_idx = 0;
+//                  log_message( log_module,  MSG_INFO, "Got CA_SET_PID removal request: %d setting channel %s with ca_idx to 0 %d\n", scam_params->ca_pid.pid, channel->name, scam_params->ca_pid.index+1);
+//                }
+//                pthread_mutex_unlock(&channel->cw_lock);
+//              } else {
                 pthread_mutex_lock(&channel->cw_lock);
                 if(!channel->ca_idx_refcnt) {
                   channel->ca_idx = scam_params->ca_pid.index+1;
@@ -177,7 +177,7 @@ static void *getcwthread_func(void* arg)
                 }
                 ++channel->ca_idx_refcnt;
                 pthread_mutex_unlock(&channel->cw_lock);
-              }
+//              }
             }
           }
           break;
